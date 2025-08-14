@@ -169,10 +169,8 @@ Invoke-RestMethod -Uri http://localhost:5000/api/run -Method Post -ContentType '
 
 ## 🖼 Screenshots
 
-(Add your screenshots to the repo and reference them here.)
+<img width="1888" height="873" alt="image" src="https://github.com/user-attachments/assets/aa0b13db-fd23-4853-9a3c-13b34e97f838" />
 
-* **UI Home**
-  `![Home](docs/screens/home.png)`
 
 ---
 
@@ -216,13 +214,3 @@ PRs welcome!
 3. Commit: `git commit -m "Add awesome feature"`
 4. Push: `git push -u origin feat/awesome`
 5. Open a Pull Request
-
----
-
-## 📄 License
-
-MIT (or your preferred license). Add a `LICENSE` file if you haven’t already.
-
----
-
-**Made with 🧡, Flask, CrewAI, and Gemini 2.0 Flash.**
