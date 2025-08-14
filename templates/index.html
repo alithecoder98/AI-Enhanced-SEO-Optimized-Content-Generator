@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>🤖✨ AI-Enhanced SEO-Optimized Content Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100">
+  <div class="min-h-screen grid grid-cols-1 lg:grid-cols-[360px_1fr]">
+    <!-- Sidebar Controls -->
+    <aside class="bg-slate-800/60 border-r border-slate-700 p-6">
+      <h1 class="text-xl font-semibold mb-4">⚙️ Generator Controls</h1>
+
+      <form id="run-form" class="space-y-4">
+        <div>
+          <label class="block text-sm mb-1">Topic</label>
+          <input id="topic" class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2"
+                 placeholder="AI" value="AI" />
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1">Tone</label>
+          <select id="tone" class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2">
+            <option>Formal</option>
+            <option>Friendly</option>
+            <option>Persuasive</option>
+            <option selected>Professional</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1">Audience</label>
+          <input id="audience" class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2"
+                 placeholder="Students" value="Students" />
+        </div>
+
+        <!-- Removed target word count; default is 1200 in backend -->
+
+        <button id="run-btn" type="submit"
+                class="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 px-4 py-2 font-semibold shadow">
+          🚀 Run Crew
+        </button>
+
+        <p id="status" class="text-xs text-slate-400 mt-2"></p>
+
+        <div class="mt-8 text-xs text-slate-500">
+          <p>Using <span class="font-semibold">Gemini 2.0 Flash</span> via CrewAI.</p>
+          <p>Target word count: <span class="font-semibold">1200</span> (fixed)</p>
+        </div>
+      </form>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="p-6 lg:p-10 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold">💬 🤖✨ AI-Enhanced SEO-Optimized Content Generator</h2>
+        <div class="flex gap-3">
+          <button id="copy-summary" class="rounded-lg border border-slate-700 px-3 py-2 hover:bg-slate-800">Copy Summary</button>
+        </div>
+      </div>
+
+      <!-- Summary (final result only) -->
+      <section>
+        <h3 class="text-lg font-semibold mb-2">✅ Summary (Final Content)</h3>
+        <article id="final" class="prose prose-invert max-w-none bg-slate-800/50 border border-slate-700 rounded-2xl p-5">
+          <p class="text-slate-400">Run the crew to see the final content…</p>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById('run-form');
+    const btn = document.getElementById('run-btn');
+    const statusEl = document.getElementById('status');
+    const finalEl = document.getElementById('final');
+    const copySummaryBtn = document.getElementById('copy-summary');
+
+    function setLoading(isLoading) {
+      btn.disabled = isLoading;
+      btn.textContent = isLoading ? '⏳ Running…' : '🚀 Run Crew';
+      statusEl.textContent = isLoading ? 'Working with agents… this can take a moment.' : '';
+    }
+
+    // simple markdown cleanup (remove triple fences if model wraps output)
+    function cleanFences(text) {
+      return text
+        .replace(/^```(?:\w+)?\s*/,'')   // leading ``` or ```lang
+        .replace(/\s*```$/,'');          // trailing ```
+    }
+
+    function renderMarkdownish(text) {
+      const t = cleanFences(text);
+      return t
+        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br/>');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setLoading(true);
+      finalEl.innerHTML = '<p class="text-slate-400">Generating…</p>';
+
+      const payload = {
+        topic: document.getElementById('topic').value || 'AI',
+        tone: document.getElementById('tone').value || 'Professional',
+        audience: document.getElementById('audience').value || 'General readers'
+        // word_count omitted; backend uses 1200
+      };
+
+      try {
+        const res = await fetch('/api/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (!data.ok) {
+          finalEl.innerHTML = `<p class="text-red-400">Error: ${data.error || 'Unknown error'}</p>`;
+          return;
+        }
+
+        finalEl.innerHTML = renderMarkdownish(data.final);
+      } catch (err) {
+        finalEl.innerHTML = `<p class="text-red-400">Request failed: ${err?.message || err}</p>`;
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copySummaryBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(finalEl.innerText);
+      copySummaryBtn.textContent = '✅ Copied';
+      setTimeout(() => (copySummaryBtn.textContent = 'Copy Summary'), 1200);
+    });
+  </script>
+</body>
+</html>

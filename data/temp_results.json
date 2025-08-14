@@ -1,0 +1,21 @@
+{
+  "topic": "AI in Healthcare",
+  "tone": "Persuasive",
+  "audience": "Startup Founders",
+  "research_data": [
+    "AI reduces diagnostic errors by 20%.",
+    "Chatbots reduce patient intake time by 30%.",
+    "Remote monitoring with AI cuts hospital visits by 25%."
+  ],
+  "keywords": ["AI healthcare", "medical automation", "patient engagement"],
+  "outline": {
+    "H1": "How AI Is Revolutionizing Healthcare",
+    "H2": [
+      "AI in Diagnostics",
+      "Patient Experience Transformation",
+      "Startup Opportunities"
+    ]
+  },
+  "raw_draft": "In today’s digital age, AI is transforming how healthcare operates...",
+  "final_output": "Formatted and SEO-optimized content goes here..."
+}

@@ -1,0 +1,25 @@
+# Core LLM & Agent Frameworks
+langchain>=0.1.15
+crewai>=0.22.6
+google-generativeai>=0.3.2
+
+# NLP & SEO
+textstat
+spacy
+nltk
+markdown2
+
+# Grammar & Readability
+requests
+bs4
+
+# Dotenv for API key management
+python-dotenv
+
+# Optional: UI or API
+fastapi
+uvicorn
+streamlit
+
+# Linting/IDE support (optional)
+pylint

@@ -1,0 +1,20 @@
+# Create/overwrite .gitignore
+@"
+# Python / venv
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS / editor
+.DS_Store
+*.log
+.vscode/
+
+# App secrets & caches
+.env
+.env.*
+!.env.example   # allow the template file
+*.sqlite3
+"@ | Out-File -Encoding utf8 .gitignore
